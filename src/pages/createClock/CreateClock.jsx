@@ -1,20 +1,23 @@
 import useSetTime from '../../hooks/useSetTime';
 import DisplayClock from '../displayClock/DisplayClock';
-import Button from '../UI/Button';
-import InputField from '../UI/InputField';
+import Button from '../../components/UI/Button';
+import InputField from '../../components/UI/InputField';
 
 const CreateClock = () => {
-  const {
-    inputValues,
-    defaultTime,
-    updatedValues,
-    toggle,
-    toggleBtn,
-    handleChange,
-    handleSubmit,
-  } = useSetTime();
+  const { inputValues, clockLists, handleChange, handleSubmit } = useSetTime();
 
-  const { hours, minutes, timeZone, seconds, title, events } = inputValues;
+  const {
+    year,
+    month,
+    date,
+    hours,
+    minutes,
+    timeZone,
+    seconds,
+    title,
+    events,
+  } = inputValues;
+
   return (
     <div className="w-50 mx-auto">
       <div className="card">
@@ -79,30 +82,58 @@ const CreateClock = () => {
                       value={events}
                     ></textarea>
                   </div>
-                  <InputField
-                    label={'Hours'}
-                    onChange={handleChange}
-                    value={hours}
-                    name={'hours'}
-                    placeholder={'Hours'}
-                    type={'number'}
-                  />
-                  <InputField
-                    label={'Minutes'}
-                    name={'minutes'}
-                    type={'number'}
-                    placeholder={'minutes'}
-                    onChange={handleChange}
-                    value={minutes}
-                  />
-                  <InputField
-                    label={'Seconds'}
-                    name={'seconds'}
-                    type={'number'}
-                    placeholder={'seconds'}
-                    onChange={handleChange}
-                    value={seconds}
-                  />
+                  <div className="d-flex">
+                    <InputField
+                      label={'Date'}
+                      onChange={handleChange}
+                      value={date}
+                      name={'date'}
+                      placeholder={'0 - 31'}
+                      type={'number'}
+                    />
+                    <InputField
+                      label={'Month'}
+                      onChange={handleChange}
+                      value={month}
+                      name={'month'}
+                      placeholder={'0 - 12'}
+                      type={'number'}
+                    />
+                    <InputField
+                      label={'Year'}
+                      onChange={handleChange}
+                      value={year}
+                      name={'year'}
+                      placeholder={'YYYY'}
+                      type={'number'}
+                    />
+                  </div>
+                  <div className="d-flex">
+                    <InputField
+                      label={'Hours'}
+                      onChange={handleChange}
+                      value={hours}
+                      name={'hours'}
+                      placeholder={'Hours'}
+                      type={'number'}
+                    />
+                    <InputField
+                      label={'Minutes'}
+                      name={'minutes'}
+                      type={'number'}
+                      placeholder={'minutes'}
+                      onChange={handleChange}
+                      value={minutes}
+                    />
+                    <InputField
+                      label={'Seconds'}
+                      name={'seconds'}
+                      type={'number'}
+                      placeholder={'seconds'}
+                      onChange={handleChange}
+                      value={seconds}
+                    />
+                  </div>
                   <InputField
                     label={'Time Zone'}
                     name={'timeZone'}
@@ -130,13 +161,21 @@ const CreateClock = () => {
       <hr />
 
       <h3 className="mt-5">My List</h3>
-      <DisplayClock
-        title={title}
-        events={events}
-        timeZone={timeZone}
-        updatedValues={updatedValues}
-        defaultTime={defaultTime}
-      />
+
+      {clockLists.length === 0 ? (
+        <p className="text-warning">No Lists Yet!</p>
+      ) : (
+        clockLists.map((item) => (
+          <DisplayClock
+            key={item.id}
+            title={item.title}
+            events={item.events}
+            updatedValues={item.updatedValues}
+            defaultTime={item.defaultTime}
+            createdAt={item.createdAt}
+          />
+        ))
+      )}
     </div>
   );
 };

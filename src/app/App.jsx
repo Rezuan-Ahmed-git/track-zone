@@ -1,6 +1,6 @@
 import InputField from '../components/UI/InputField';
 import Button from '../components/UI/Button';
-import CreateClock from '../components/createClock/CreateClock';
+import CreateClock from '../pages/createClock/CreateClock';
 import useSetTime from '../hooks/useSetTime';
 
 const App = () => {
@@ -13,7 +13,6 @@ const App = () => {
     handleSubmit,
     updatedValues,
   } = useSetTime();
-
   const { hours, minutes, timeZone } = inputValues;
 
   return (

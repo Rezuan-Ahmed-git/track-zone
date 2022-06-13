@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import shortid from 'shortid';
 import {
   getMinutes,
   getHours,
@@ -29,6 +30,7 @@ const useSetTime = () => {
   const [inputValues, setInputValues] = useState({ ...ownTimeInit });
   const [toggle, setToggle] = useState(false);
   const [updatedValues, setUpdatedValues] = useState('');
+  const [clockLists, setClockLists] = useState([]);
 
   const defaultTime = new Date().toLocaleTimeString('en-US', {
     timeZoneName: 'short',
@@ -41,25 +43,46 @@ const useSetTime = () => {
     });
   };
 
-  const { year, month, date, hours, minutes, timeZone, timeZoneName, hour12 } =
-    inputValues;
+  const {
+    year,
+    month,
+    date,
+    hours,
+    minutes,
+    timeZone,
+    timeZoneName,
+    hour12,
+    title,
+    events,
+  } = inputValues;
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const ownDate = new Date(
-      year,
-      month,
-      date,
-      hours,
-      minutes
-    ).toLocaleTimeString('en-Us', {
-      timeZone: timeZone,
-      hour12,
-      timeZoneName,
-    });
+    const ownTime = new Date(year, month, date, hours, minutes).toLocaleString(
+      'en-Us',
+      {
+        timeZone: timeZone,
+        hour12,
+        timeZoneName,
+      }
+    );
+    console.log('ownTime', ownTime);
+    inputValues.updatedDate = ownTime;
+    setUpdatedValues(inputValues.updatedDate);
 
-    setUpdatedValues((inputValues.updatedDate = ownDate));
+    //create lists of clock
+    const singleClock = {
+      id: shortid.generate(),
+      title: title,
+      events: events,
+      updatedValues: inputValues.updatedDate,
+      createdAt: new Date().toLocaleDateString(),
+      defaultTime: defaultTime,
+    };
+
+    setClockLists([singleClock, ...clockLists]);
+    console.log(clockLists);
   };
 
   const toggleBtn = () => {
@@ -76,6 +99,7 @@ const useSetTime = () => {
     defaultTime,
     updatedValues,
     toggle,
+    clockLists,
     toggleBtn,
     handleChange,
     handleSubmit,
