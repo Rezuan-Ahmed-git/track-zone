@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { getMinutes, getHours, getDate, getMonth, getYear } from 'date-fns';
+import {
+  getMinutes,
+  getHours,
+  getDate,
+  getMonth,
+  getYear,
+  getSeconds,
+} from 'date-fns';
 
 const date = new Date();
 
@@ -9,6 +16,9 @@ const ownTimeInit = {
   date: getDate(date),
   hours: getHours(date),
   minutes: getMinutes(date),
+  seconds: getSeconds(date),
+  title: '',
+  events: '',
   timeZone: 'Asia/Dhaka',
   hour12: true,
   timeZoneName: 'short',
@@ -18,7 +28,7 @@ const ownTimeInit = {
 const useSetTime = () => {
   const [inputValues, setInputValues] = useState({ ...ownTimeInit });
   const [toggle, setToggle] = useState(false);
-  const [updatedTime, setUpdatedTime] = useState('');
+  const [updatedValues, setUpdatedValues] = useState('');
 
   const defaultTime = new Date().toLocaleTimeString('en-US', {
     timeZoneName: 'short',
@@ -31,17 +41,8 @@ const useSetTime = () => {
     });
   };
 
-  const {
-    year,
-    month,
-    date,
-    hours,
-    minutes,
-    timeZone,
-    timeZoneName,
-    hour12,
-    updatedDate,
-  } = inputValues;
+  const { year, month, date, hours, minutes, timeZone, timeZoneName, hour12 } =
+    inputValues;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -57,9 +58,8 @@ const useSetTime = () => {
       hour12,
       timeZoneName,
     });
-    inputValues.updatedDate = ownDate;
-    setUpdatedTime((inputValues.updatedDate = ownDate));
-    // console.log(updatedTime);
+
+    setUpdatedValues((inputValues.updatedDate = ownDate));
   };
 
   const toggleBtn = () => {
@@ -72,8 +72,10 @@ const useSetTime = () => {
   };
 
   return {
+    inputValues,
     defaultTime,
-    updatedTime,
+    updatedValues,
+    toggle,
     toggleBtn,
     handleChange,
     handleSubmit,

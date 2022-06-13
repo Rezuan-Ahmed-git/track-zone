@@ -1,7 +1,12 @@
-const Button = ({ title, onClick, type }) => {
+const Button = ({ title, onClick, type, customStyle }) => {
   return (
     <>
-      <button className="btn btn-light" type={type} onClick={onClick}>
+      <button
+        className="btn btn-info fw-bold text-white"
+        style={customStyle}
+        type={type}
+        onClick={onClick}
+      >
         {title}
       </button>
     </>

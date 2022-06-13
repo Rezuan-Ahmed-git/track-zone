@@ -1,7 +1,21 @@
-const InputField = ({ name, label, type, placeholder, onChange, value }) => {
+import React from 'react';
+
+const InputField = ({
+  name,
+  label,
+  type,
+  placeholder,
+  onChange,
+  value,
+  customStyle,
+}) => {
   return (
-    <>
-      <label className="form-label" htmlFor={name}>
+    <div className="border p-3">
+      <label
+        className="form-label m-2 fw-bold"
+        style={customStyle}
+        htmlFor={name}
+      >
         {label}
       </label>
       <input
@@ -13,7 +27,7 @@ const InputField = ({ name, label, type, placeholder, onChange, value }) => {
         onChange={onChange}
         value={value}
       />
-    </>
+    </div>
   );
 };
 
