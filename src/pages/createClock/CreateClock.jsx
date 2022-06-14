@@ -2,9 +2,32 @@ import useSetTime from '../../hooks/useSetTime';
 import DisplayClock from '../displayClock/DisplayClock';
 import Button from '../../components/UI/Button';
 import InputField from '../../components/UI/InputField';
+import InputGroup from '../../components/shared/inputGroup/InputGroup';
+import { useState } from 'react';
+import { deleteItem } from '../../utils/object-utils';
 
 const CreateClock = () => {
-  const { inputValues, clockLists, handleChange, handleSubmit } = useSetTime();
+  const { inputValues, clockLists, handleChange, handleSubmit, savedData } =
+    useSetTime();
+  const [singleClockId, setSingleClockId] = useState('');
+
+  //get and delete
+  const getAndRemoveId = (id) => {
+    setSingleClockId(id);
+    deleteItem(id, clockLists);
+  };
+
+  //get and edit
+  const getAndEdit = (id) => {
+    const editedItem = clockLists.find((item) => item.id === id);
+    if (editedItem.id === id) {
+      editedItem.title = savedData.title;
+      editedItem.events = savedData.events;
+      console.log('I am inside condition', editedItem.title);
+    }
+  };
+
+  // console.log(singleClockId);
 
   const {
     year,
@@ -82,65 +105,15 @@ const CreateClock = () => {
                       value={events}
                     ></textarea>
                   </div>
-                  <div className="d-flex">
-                    <InputField
-                      label={'Date'}
-                      onChange={handleChange}
-                      value={date}
-                      name={'date'}
-                      placeholder={'0 - 31'}
-                      type={'number'}
-                    />
-                    <InputField
-                      label={'Month'}
-                      onChange={handleChange}
-                      value={month}
-                      name={'month'}
-                      placeholder={'0 - 12'}
-                      type={'number'}
-                    />
-                    <InputField
-                      label={'Year'}
-                      onChange={handleChange}
-                      value={year}
-                      name={'year'}
-                      placeholder={'YYYY'}
-                      type={'number'}
-                    />
-                  </div>
-                  <div className="d-flex">
-                    <InputField
-                      label={'Hours'}
-                      onChange={handleChange}
-                      value={hours}
-                      name={'hours'}
-                      placeholder={'Hours'}
-                      type={'number'}
-                    />
-                    <InputField
-                      label={'Minutes'}
-                      name={'minutes'}
-                      type={'number'}
-                      placeholder={'minutes'}
-                      onChange={handleChange}
-                      value={minutes}
-                    />
-                    <InputField
-                      label={'Seconds'}
-                      name={'seconds'}
-                      type={'number'}
-                      placeholder={'seconds'}
-                      onChange={handleChange}
-                      value={seconds}
-                    />
-                  </div>
-                  <InputField
-                    label={'Time Zone'}
-                    name={'timeZone'}
-                    type={'text'}
-                    placeholder={'Sample: Asia/Dhaka'}
-                    onChange={handleChange}
-                    value={timeZone}
+                  <InputGroup
+                    year={year}
+                    month={month}
+                    date={date}
+                    hours={hours}
+                    minutes={minutes}
+                    seconds={seconds}
+                    timeZone={timeZone}
+                    handleChange={handleChange}
                   />
                   <Button
                     title={'Create Clock'}
@@ -173,6 +146,9 @@ const CreateClock = () => {
             updatedValues={item.updatedValues}
             defaultTime={item.defaultTime}
             createdAt={item.createdAt}
+            id={item.id}
+            getAndRemoveId={getAndRemoveId}
+            getAndEdit={getAndEdit}
           />
         ))
       )}

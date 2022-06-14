@@ -1,15 +1,19 @@
-const indianDate = new Date().toLocaleTimeString('en-US', {
-  timeZone: 'Indian/Christmas',
-});
-const bdDate = new Date().toLocaleTimeString('en-US', {
-  timeZone: 'Indian/Christmas',
-  hour12: false,
-  timeZoneName: 'short',
-});
+// import { format } from 'date-fns';
+
+// const indianDate = new Date().toLocaleTimeString('en-US', {
+//   timeZone: 'Indian/Christmas',
+// });
+// const bdDate = new Date().toLocaleTimeString('en-US', {
+//   timeZone: 'Indian/Christmas',
+//   hour12: false,
+//   timeZoneName: 'short',
+// });
 // console.log(bdDate);
 
-const d = new Date(0, 0, 0, 12, 30, 40);
-// console.log(d);
+// const d = new Date();
+// const formatted = format(d, 'MM/dd/yyyy');
+
+// console.log(formatted);
 
 //Compare
 // let text;
@@ -24,28 +28,40 @@ const d = new Date(0, 0, 0, 12, 30, 40);
 //   text = 'Today is after January 14, 2100.';
 //   console.log(text);
 // }
-const inputValues = {
-  year: 2022,
-  month: 6,
-  date: 13,
-  hours: 12,
-  minutes: 5,
-  seconds: 59,
-  title: 'zeroTitle',
-  events: 'no events',
-  timeZone: 'Asia/Dhaka',
-  hour12: true,
-  timeZoneName: 'short',
-  updatedDate: 'emty',
-};
 
-const mapToArray = () => {
-  return Object.keys(inputValues).reduce((acc, cur) => {
-    // console.log('current key: ', cur);
-    acc[cur] = inputValues[cur];
-    console.log(acc);
+const arrOfObj = [
+  {
+    id: 1,
+    title: 'Ridwan',
+  },
+  {
+    id: 2,
+    title: 'Ahmed',
+  },
+  {
+    id: 3,
+    title: 'Shourav',
+  },
+];
+const id = 3;
+const search = arrOfObj.find((item) => item.id === id);
+// const r = arrOfObj.filter((item) => item.id !== id);
+console.log(search.id);
 
-    return acc;
-  }, []);
-};
-mapToArray();
+if (id === search.id) {
+  (search.title = 'Akib'), (search.id = id + 1);
+}
+
+console.log(arrOfObj);
+
+// console.log(r);
+
+// const deleteList = (id, arrOfObj) => {
+//   arrOfObj.splice(
+//     arrOfObj.findIndex((item) => item.id === id),
+//     1
+//   );
+//   console.log(arrOfObj);
+// };
+
+// deleteList(id, arrOfObj);

@@ -1,46 +1,40 @@
 import { useState } from 'react';
 import shortid from 'shortid';
-import {
-  getMinutes,
-  getHours,
-  getDate,
-  getMonth,
-  getYear,
-  getSeconds,
-} from 'date-fns';
+import { format } from 'date-fns';
 
-const date = new Date();
-
-const ownTimeInit = {
-  year: getYear(date),
-  month: getMonth(date),
-  date: getDate(date),
-  hours: getHours(date),
-  minutes: getMinutes(date),
-  seconds: getSeconds(date),
+const TIME_INIT_DATA = {
+  year: '',
+  month: '',
+  date: '',
+  hours: '',
+  minutes: '',
+  seconds: '',
   title: '',
   events: '',
-  timeZone: 'Asia/Dhaka',
+  timeZone: '',
   hour12: true,
-  timeZoneName: 'short',
   updatedDate: '',
 };
 
 const useSetTime = () => {
-  const [inputValues, setInputValues] = useState({ ...ownTimeInit });
+  const [inputValues, setInputValues] = useState({ ...TIME_INIT_DATA });
   const [toggle, setToggle] = useState(false);
-  const [updatedValues, setUpdatedValues] = useState('');
   const [clockLists, setClockLists] = useState([]);
+  const [updatedTime, setUpdatedTime] = useState('');
+  const [savedData, setSavedData] = useState({ ...TIME_INIT_DATA });
 
-  const defaultTime = new Date().toLocaleTimeString('en-US', {
-    timeZoneName: 'short',
-  });
+  const defaultTime = format(
+    new Date(),
+    '(dd-MM-yyyy) - hh : mm : ss aaa  (zzzz)'
+  );
 
   const handleChange = (e) => {
     setInputValues({
       ...inputValues,
       [e.target.name]: e.target.value,
     });
+    setSavedData({ ...savedData, [e.target.name]: e.target.value });
+    console.log(savedData);
   };
 
   const {
@@ -49,9 +43,8 @@ const useSetTime = () => {
     date,
     hours,
     minutes,
+    seconds,
     timeZone,
-    timeZoneName,
-    hour12,
     title,
     events,
   } = inputValues;
@@ -59,17 +52,22 @@ const useSetTime = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const ownTime = new Date(year, month, date, hours, minutes).toLocaleString(
-      'en-Us',
-      {
-        timeZone: timeZone,
-        hour12,
-        timeZoneName,
-      }
-    );
-    console.log('ownTime', ownTime);
+    //Time created
+    const ownTime = new Date(
+      year,
+      month,
+      date,
+      hours,
+      minutes,
+      seconds
+    ).toLocaleString('en-Us', {
+      timeZone: timeZone,
+      hour12: true,
+      timeZoneName: 'short',
+    });
+
     inputValues.updatedDate = ownTime;
-    setUpdatedValues(inputValues.updatedDate);
+    setUpdatedTime((inputValues.updatedDate = ownTime));
 
     //create lists of clock
     const singleClock = {
@@ -78,13 +76,17 @@ const useSetTime = () => {
       events: events,
       updatedValues: inputValues.updatedDate,
       createdAt: new Date().toLocaleDateString(),
-      defaultTime: defaultTime,
     };
-
+    //Array of Clock Lists
     setClockLists([singleClock, ...clockLists]);
-    console.log(clockLists);
+
+    //Save Data from input
+
+    //CLEAR DATA
+    setInputValues({ ...TIME_INIT_DATA });
   };
 
+  //Button toggler
   const toggleBtn = () => {
     if (toggle) {
       setToggle(false);
@@ -97,9 +99,10 @@ const useSetTime = () => {
   return {
     inputValues,
     defaultTime,
-    updatedValues,
     toggle,
     clockLists,
+    updatedTime,
+    savedData,
     toggleBtn,
     handleChange,
     handleSubmit,
